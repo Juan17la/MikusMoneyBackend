@@ -22,7 +22,6 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * Service for JWT token operations including generation, validation, and claim extraction.
- * Uses configuration from JwtProperties for environment-agnostic operation.
  */
 @Slf4j
 @Service
