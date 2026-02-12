@@ -26,9 +26,17 @@ public class BusinessException extends ApiException {
     public static BusinessException passwordMismatch() {
         return new BusinessException("Passwords do not match", "PASSWORD_MISMATCH");
     }
-
+    
+    public static BusinessException passwordLength() {
+        return new BusinessException("Passwords should be at least 8 characters", "PASSWORD_LENGTH");
+    }
+    
     public static BusinessException pinMismatch() {
         return new BusinessException("PIN codes do not match", "PIN_MISMATCH");
+    }
+    
+    public static BusinessException pinLength() {
+        return new BusinessException("Pin should be at least between 4 and 6 digits", "PIN_LENGTH");
     }
 
     public static BusinessException userNotAdult() {

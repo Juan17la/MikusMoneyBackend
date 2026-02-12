@@ -58,6 +58,8 @@ public class AuthService {
 
         // Validate confirmations
         validateConfirmations(request);
+        // Validate lengths and formats for password and PIN
+        validateLengthCredentials(request);
 
         // Create Miku entity
         Miku miku = mikuMapper.toEntity(request);
@@ -70,7 +72,7 @@ public class AuthService {
         Miku savedMiku = mikuRepository.save(miku);
         log.debug("Miku created with ID: {}", savedMiku.getId());
 
-        // Create and persist Credential
+
         Credential credential = Credential.builder()
                 .email(request.getEmail())
                 .phoneNumber(request.getPhoneNumber())
@@ -229,6 +231,18 @@ public class AuthService {
 
         if (!request.getPinCode().equals(request.getPinCodeConfirmation())) {
             throw BusinessException.pinMismatch();
+        }
+    }
+
+    private void validateLengthCredentials(MikuCreateRequest request){
+        String password = request.getPassword();
+        if (password == null || password.length() < 8) {
+            throw BusinessException.passwordLength();
+        }
+
+        String pin = request.getPinCode();
+        if (pin == null || !pin.matches("^\\d{4,6}$")) {
+            throw BusinessException.pinLength();
         }
     }
 

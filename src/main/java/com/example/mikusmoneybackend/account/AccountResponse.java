@@ -14,4 +14,5 @@ public class AccountResponse {
     private BigDecimal totalMoney;
     private String fullName;
     private String publicCode;
+    
 }

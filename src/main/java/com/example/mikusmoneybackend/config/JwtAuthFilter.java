@@ -3,7 +3,6 @@ package com.example.mikusmoneybackend.config;
 import java.io.IOException;
 import java.util.Collections;
 
-import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -15,6 +14,7 @@ import com.example.mikusmoneybackend.auth.JwtService;
 import com.example.mikusmoneybackend.miku.Miku;
 import com.example.mikusmoneybackend.miku.MikuRepository;
 
+import jakarta.annotation.Nonnull;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -39,9 +39,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(
-            @NonNull HttpServletRequest request,
-            @NonNull HttpServletResponse response,
-            @NonNull FilterChain filterChain) throws ServletException, IOException {
+            @Nonnull HttpServletRequest request,
+            @Nonnull HttpServletResponse response,
+            @Nonnull FilterChain filterChain) throws ServletException, IOException {
 
         // Skip if already authenticated
         if (SecurityContextHolder.getContext().getAuthentication() != null) {
