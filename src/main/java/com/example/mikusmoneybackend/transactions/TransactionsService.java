@@ -1,6 +1,7 @@
 package com.example.mikusmoneybackend.transactions;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,6 +13,7 @@ import com.example.mikusmoneybackend.account.Account;
 import com.example.mikusmoneybackend.account.AccountRepository;
 import com.example.mikusmoneybackend.auth.AuthContextService;
 import com.example.mikusmoneybackend.auth.AuthContextService.AuthContext;
+import com.example.mikusmoneybackend.config.exception.BusinessException;
 import com.example.mikusmoneybackend.config.exception.ResourceNotFoundException;
 import com.example.mikusmoneybackend.deposit.Deposit;
 import com.example.mikusmoneybackend.deposit.DepositRepository;
@@ -72,6 +74,8 @@ public class TransactionsService {
 
         BigDecimal amount = request.getAmount();
 
+        validateMaxAmount(amount);
+
         // 3. Update account balance (validates amount internally)
         context.account().deposit(amount);
         accountRepository.save(context.account());
@@ -109,7 +113,7 @@ public class TransactionsService {
         AuthContext context = authContextService.validateAuthWithPin(request.getPinCode());
         
         BigDecimal amount = request.getAmount();
-        
+
         // 3. Update account balance (validates sufficient funds internally)
         context.account().withdraw(amount);
         accountRepository.save(context.account());
@@ -157,6 +161,7 @@ public class TransactionsService {
         
         // 5. Execute transfer (validates sufficient funds internally)
         BigDecimal amount = request.getAmount();
+        validateMaxAmount(amount);
         context.account().transfer(receiverAccount, amount);
         accountRepository.save(context.account());
         accountRepository.save(receiverAccount);
@@ -220,5 +225,13 @@ public class TransactionsService {
         }
 
         return builder.build();
+    }
+
+    public void validateMaxAmount(BigDecimal amount){
+        BigDecimal limit = new BigDecimal("10000.00");
+
+        if(amount == null || amount.compareTo(limit) > 0 ) {
+            throw BusinessException.overMaxAmout();
+        }
     }
 }

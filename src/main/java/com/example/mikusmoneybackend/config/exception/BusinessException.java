@@ -47,6 +47,10 @@ public class BusinessException extends ApiException {
         return new BusinessException("Insufficient funds", "INSUFFICIENT_FUNDS");
     }
 
+    public static BusinessException overMaxAmout() {
+        return new BusinessException("You can't deposit or send more than $10,000 in one transaction", "OVER_MAX_AMOUTH");
+    }
+
     public static BusinessException invalidAmount() {
         return new BusinessException("Amount must be greater than zero", "INVALID_AMOUNT");
     }
